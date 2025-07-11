@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+Kind: Deployment
+metadata: 
+  name: auth-dep
+  labels:
+    app: auth
+spec:
+  replicas: 2
+  selector: 
+    matchLabels:
+      app: auth
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels: 
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: wasay786/auth:latest
+          ports: 
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: auth-configmap
+            - secretRef:
+                name: auth-secret
+              
