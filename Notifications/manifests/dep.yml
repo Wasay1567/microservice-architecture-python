@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notify
+  labels:
+    app: notify
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: notify
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 8
+  template:
+    metadata:
+      labels:
+        app: notify
+    spec:
+      containers:
+      - name: notify
+        image: wasay786/notify:latest
+        envFrom:
+        - configMapRef:
+            name: notify-configmap
+        - secretRef:
+            name: notify-secret
+
