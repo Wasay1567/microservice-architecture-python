@@ -25,4 +25,4 @@ spec:
         - configMapRef:
             name: gateway-configmap
         - secretRef:
-          name: gateway-secrets
+            name: gateway-secrets

@@ -1,6 +1,6 @@
 import os, requests
 
-def access(request):
+def login(request):
     auth = request.authorization
     if not auth:
         return None, ("missing credentials", 401)

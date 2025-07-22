@@ -11,8 +11,8 @@ spec:
   - host: mp3convertor.com
     http:
       paths: 
-      - path: /
-        path-type: Prefix
+      - pathType: Prefix
+        path: /
         backend:
           service:
             name: gateway-service
