@@ -10,6 +10,3 @@ def hash_password(password: str) -> str:
 def check_password(password: str, hashed: str) -> bool:
     """Check a password against a hashed password."""
     return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
-
-
-print(hash_password("Wasay786"))
