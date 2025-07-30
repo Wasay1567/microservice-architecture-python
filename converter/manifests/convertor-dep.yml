@@ -23,7 +23,7 @@ spec:
         image: wasay786/converter:latest
         envFrom:
           - configMapRef:
-            name: converter-configmap
+              name: converter-configmap
           - secretRef:
-            name: converter-secret
+              name: converter-secret
 

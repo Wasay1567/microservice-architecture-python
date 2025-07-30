@@ -5,14 +5,14 @@ from hash import check_password
 import jwt
 from datetime import datetime, timedelta
 import datetime
+from hash import hash_password
+from uuid import uuid4
 
 app = Flask(__name__)
 
 def get_db():
-    con = psycopg2.connect(host=os.environ.get("POSTGRES_HOST"),
-                            database=os.environ.get("POSTGRES_DB"),
-                            user=os.environ.get("POSTGRES_USER"),
-                            password=os.environ.get("POSTGRES_PASS"))
+    POSTGRESS_URI = f"postgresql://:{os.environ.get('POSTGRES_USER')}@{os.environ.get('POSTGRES_PASS')}:5432/{os.environ.get('POSTGRES_DB')}"
+    con = psycopg2.connect(POSTGRESS_URI)
     return con
 
 
@@ -43,6 +43,35 @@ def login():
     else:
         return "invalid credentials", 401
         
+
+@app.route("/register", methods=["POST"])
+def register():
+    data = request.get_json()
+    if not data or not data.get("email") or not data.get("password"):
+        return "missing credentials", 400
+
+    email = data["email"]
+    password = data["password"]
+
+    hashed_password = hash_password(password)
+
+    con = get_db()
+    cur = con.cursor()
+    try:
+        cur.execute("INSERT INTO Users (id, email, password, is_admin) VALUES (%s, %s, %s, %s) RETURNING id", (uuid4(), email, hashed_password, False))
+        user_id = cur.fetchone()[0]
+        con.commit()
+    except psycopg2.errors.UniqueViolation:
+        con.rollback()
+        return "user already exists", 409
+    except Exception as e:
+        con.rollback()
+        return "registration failed", 500
+    finally:
+        cur.close()
+        con.close()
+
+    return {"id": user_id, "email": email, "is_admin": False}, 201
 
 
 @app.route("/validate", methods=["POST"])

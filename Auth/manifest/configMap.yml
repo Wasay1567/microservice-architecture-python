@@ -3,6 +3,5 @@ kind: ConfigMap
 metadata:
   name: auth-configmap
 data:
-  POSTGRES_HOST: host.minikube.internal
   POSTGRES_DB: auth
-  POSTGRES_USER: auth_user
+  POSTGRES_USER: postgres
