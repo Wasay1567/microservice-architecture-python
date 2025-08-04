@@ -1,0 +1,16 @@
+{
+    "name": "kubernetes-practice",
+    "build": {
+        "dockerfile": "dockerfile",
+        "args": { "KIND_VERSION": "0.14.0" }
+    },
+    "mounts": ["type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock"],
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "terminal.integrated.shell.linux": "/bin/sh"
+            }
+        }
+    },
+    "remoteUser": "root"
+}
